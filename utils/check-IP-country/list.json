@@ -1,0 +1,56 @@
+[
+    {
+      "source": "192.168.1.0/24",
+      "destination": "172.16.0.0/16",
+      "action": "accept",
+      "protocol": "tcp",
+      "port": "80",
+      "group": "web-traffic",
+      "description": "Allow web traffic from internal network to external network"
+    },
+    {
+      "source": "10.0.0.0/8",
+      "destination": "192.168.1.0/24",
+      "action": "reject",
+      "protocol": "tcp",
+      "port": "22",
+      "group": "ssh-block",
+      "description": "Block SSH from external network to internal network"
+    },
+    {
+      "source": "192.168.1.200",
+      "destination": "203.12.45.100",
+      "action": "accept",
+      "protocol": "udp",
+      "port": "53",
+      "group": "dns",
+      "description": "Allow DNS queries from internal network to external DNS server"
+    },
+    {
+      "source": "192.168.1.200",
+      "destination": "8.8.8.8",
+      "action": "accept",
+      "protocol": "tcp",
+      "port": "443",
+      "group": "https",
+      "description": "Allow HTTPS traffic from internal network to Google"
+    },
+    {
+      "source": "192.168.1.200",
+      "destination": "192.168.1.100",
+      "action": "reject",
+      "protocol": "tcp",
+      "port": "25",
+      "group": "smtp-block",
+      "description": "Block SMTP traffic from internal network to specific server"
+    },
+    {
+      "source": "172.16.0.0/16",
+      "destination": "192.168.1.0/24",
+      "action": "reject",
+      "protocol": "all",
+      "port": "all",
+      "group": "dmz-block",
+      "description": "Block all traffic from DMZ to internal network"
+    }
+  ]

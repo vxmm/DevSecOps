@@ -1,0 +1,7 @@
+source,destination,action,protocol,port,group,description
+192.168.1.0/24,172.16.0.0/16,accept,tcp,80,web-traffic,"Allow web traffic from internal network to external network"
+10.0.0.0/8,192.168.1.0/24,reject,tcp,22,ssh-block,"Block SSH from external network to internal network"
+192.168.1.200,203.12.45.100,accept,udp,53,dns,"Allow DNS queries from internal network to external DNS server"
+192.168.1.200,8.8.8.8,accept,tcp,443,https,"Allow HTTPS traffic from internal network to Google"
+192.168.1.200,192.168.1.100,reject,tcp,25,smtp-block,"Block SMTP traffic from internal network to specific server"
+172.16.0.0/16,192.168.1.0/24,reject,all,all,dmz-block,"Block all traffic from DMZ to internal network"
