@@ -1,0 +1,540 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "AwsAccessKeyRotatorStack": {
+        "id": "AwsAccessKeyRotatorStack",
+        "path": "AwsAccessKeyRotatorStack",
+        "children": {
+          "UserIdentity": {
+            "id": "UserIdentity",
+            "path": "AwsAccessKeyRotatorStack/UserIdentity",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsAccessKeyRotatorStack/UserIdentity/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SES::EmailIdentity",
+                  "aws:cdk:cloudformation:props": {
+                    "emailIdentity": "vlad.pulosul45234545635634@yahoo.com"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ses.CfnEmailIdentity",
+                  "version": "2.64.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ses.EmailIdentity",
+              "version": "2.64.0"
+            }
+          },
+          "EmailSource": {
+            "id": "EmailSource",
+            "path": "AwsAccessKeyRotatorStack/EmailSource",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsAccessKeyRotatorStack/EmailSource/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SES::EmailIdentity",
+                  "aws:cdk:cloudformation:props": {
+                    "emailIdentity": "vlad.maracine@yahoo.com"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ses.CfnEmailIdentity",
+                  "version": "2.64.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ses.EmailIdentity",
+              "version": "2.64.0"
+            }
+          },
+          "FailureTopic": {
+            "id": "FailureTopic",
+            "path": "AwsAccessKeyRotatorStack/FailureTopic",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsAccessKeyRotatorStack/FailureTopic/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {
+                    "topicName": "access-key-rotation-notification"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                  "version": "2.64.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Topic",
+              "version": "2.64.0"
+            }
+          },
+          "admin": {
+            "id": "admin",
+            "path": "AwsAccessKeyRotatorStack/admin",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsAccessKeyRotatorStack/admin/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Subscription",
+                  "aws:cdk:cloudformation:props": {
+                    "protocol": "email",
+                    "topicArn": {
+                      "Ref": "FailureTopic74C6EA16"
+                    },
+                    "endpoint": "vlad.maracine@yahoo.com"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnSubscription",
+                  "version": "2.64.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Subscription",
+              "version": "2.64.0"
+            }
+          },
+          "lambdaRole": {
+            "id": "lambdaRole",
+            "path": "AwsAccessKeyRotatorStack/lambdaRole",
+            "children": {
+              "ImportlambdaRole": {
+                "id": "ImportlambdaRole",
+                "path": "AwsAccessKeyRotatorStack/lambdaRole/ImportlambdaRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.64.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsAccessKeyRotatorStack/lambdaRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "lambda.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/SecretsManagerReadWrite"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/IAMFullAccess"
+                          ]
+                        ]
+                      }
+                    ],
+                    "policies": [
+                      {
+                        "policyName": "SES",
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "ses:SendEmail",
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      },
+                      {
+                        "policyName": "SNS",
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sns:Publish",
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Ref": "FailureTopic74C6EA16"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    ],
+                    "roleName": "access-key-rotator-role"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.64.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "AwsAccessKeyRotatorStack/lambdaRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AwsAccessKeyRotatorStack/lambdaRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "secretsmanager:DescribeSecret",
+                                "secretsmanager:GetSecretValue",
+                                "secretsmanager:PutSecretValue",
+                                "secretsmanager:UpdateSecretVersionStage"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Ref": "testkeyrotatorSecretA6333A19"
+                              }
+                            },
+                            {
+                              "Action": "secretsmanager:GetRandomPassword",
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "lambdaRoleDefaultPolicyA63A8A92",
+                        "roles": [
+                          {
+                            "Ref": "lambdaRoleC844FDB1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.64.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.64.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.64.0"
+            }
+          },
+          "lambda": {
+            "id": "lambda",
+            "path": "AwsAccessKeyRotatorStack/lambda",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "AwsAccessKeyRotatorStack/lambda/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "AwsAccessKeyRotatorStack/lambda/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.64.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "AwsAccessKeyRotatorStack/lambda/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.64.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.64.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsAccessKeyRotatorStack/lambda/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": "cdk-hnb659fds-assets-975050137696-us-east-1",
+                      "s3Key": "a4eef9172c43dc529f4a4168c79d6d00a98c7e4758f510a7a92d2a22574e109f.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "lambdaRoleC844FDB1",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "sns_topic_arn": {
+                          "Ref": "FailureTopic74C6EA16"
+                        },
+                        "source_email": "vlad.maracine@yahoo.com"
+                      }
+                    },
+                    "functionName": "access-key-rotator",
+                    "handler": "lambda_function.lambda_handler",
+                    "runtime": "python3.9",
+                    "timeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.64.0"
+                }
+              },
+              "SecretsManagerPolicy": {
+                "id": "SecretsManagerPolicy",
+                "path": "AwsAccessKeyRotatorStack/lambda/SecretsManagerPolicy",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "lambda8B5974B5",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "secretsmanager.amazonaws.com"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.64.0"
+                }
+              },
+              "InvokeN0--a2GKfZP0JmDqDE--Vhhu6+A0TUv3NyNbk4YM+FKNc=": {
+                "id": "InvokeN0--a2GKfZP0JmDqDE--Vhhu6+A0TUv3NyNbk4YM+FKNc=",
+                "path": "AwsAccessKeyRotatorStack/lambda/InvokeN0--a2GKfZP0JmDqDE--Vhhu6+A0TUv3NyNbk4YM+FKNc=",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "lambda8B5974B5",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "secretsmanager.amazonaws.com"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.64.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.64.0"
+            }
+          },
+          "test-key-rotatorSecret": {
+            "id": "test-key-rotatorSecret",
+            "path": "AwsAccessKeyRotatorStack/test-key-rotatorSecret",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AwsAccessKeyRotatorStack/test-key-rotatorSecret/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SecretsManager::Secret",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "/access-key/test-key-rotator",
+                    "secretString": "{\"access_key_id\":\"foo\",\"secret_access_key\":\"bar\"}"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_secretsmanager.CfnSecret",
+                  "version": "2.64.0"
+                }
+              },
+              "test-key-rotatorRotation": {
+                "id": "test-key-rotatorRotation",
+                "path": "AwsAccessKeyRotatorStack/test-key-rotatorSecret/test-key-rotatorRotation",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AwsAccessKeyRotatorStack/test-key-rotatorSecret/test-key-rotatorRotation/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SecretsManager::RotationSchedule",
+                      "aws:cdk:cloudformation:props": {
+                        "secretId": {
+                          "Ref": "testkeyrotatorSecretA6333A19"
+                        },
+                        "rotationLambdaArn": {
+                          "Fn::GetAtt": [
+                            "lambda8B5974B5",
+                            "Arn"
+                          ]
+                        },
+                        "rotationRules": {
+                          "automaticallyAfterDays": 90
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_secretsmanager.CfnRotationSchedule",
+                      "version": "2.64.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_secretsmanager.RotationSchedule",
+                  "version": "2.64.0"
+                }
+              },
+              "Policy": {
+                "id": "Policy",
+                "path": "AwsAccessKeyRotatorStack/test-key-rotatorSecret/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AwsAccessKeyRotatorStack/test-key-rotatorSecret/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::SecretsManager::ResourcePolicy",
+                      "aws:cdk:cloudformation:props": {
+                        "resourcePolicy": {
+                          "Statement": [
+                            {
+                              "Action": "secretsmanager:DeleteSecret",
+                              "Effect": "Deny",
+                              "Principal": {
+                                "AWS": "arn:aws:iam::975050137696:root"
+                              },
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "secretId": {
+                          "Ref": "testkeyrotatorSecretA6333A19"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_secretsmanager.CfnResourcePolicy",
+                      "version": "2.64.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_secretsmanager.ResourcePolicy",
+                  "version": "2.64.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_secretsmanager.Secret",
+              "version": "2.64.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "AwsAccessKeyRotatorStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "AwsAccessKeyRotatorStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.64.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.1"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "AwsAccessKeyRotatorStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.64.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "AwsAccessKeyRotatorStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.64.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.64.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.4.1"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.64.0"
+    }
+  }
+}

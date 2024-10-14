@@ -1,0 +1,136 @@
+{
+  "version": "29.0.0",
+  "artifacts": {
+    "AwsAccessKeyRotatorStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "AwsAccessKeyRotatorStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "AwsAccessKeyRotatorStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://975050137696/us-east-1",
+      "properties": {
+        "templateFile": "AwsAccessKeyRotatorStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::975050137696:role/cdk-hnb659fds-deploy-role-975050137696-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::975050137696:role/cdk-hnb659fds-cfn-exec-role-975050137696-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-975050137696-us-east-1/3d1a2fbb9c953aefe5592e3779f385956e443c7f09fa71797c3999df1752b403.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "AwsAccessKeyRotatorStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::975050137696:role/cdk-hnb659fds-lookup-role-975050137696-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "AwsAccessKeyRotatorStack.assets"
+      ],
+      "metadata": {
+        "/AwsAccessKeyRotatorStack/UserIdentity/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserIdentityEB159DB7"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/EmailSource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EmailSource61C1196B"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/FailureTopic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FailureTopic74C6EA16"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/admin/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "admin81D8EBF0"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/lambdaRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaRoleC844FDB1"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/lambdaRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaRoleDefaultPolicyA63A8A92"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambda8B5974B5"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/lambda/SecretsManagerPolicy": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaSecretsManagerPolicy93051294"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/lambda/InvokeN0--a2GKfZP0JmDqDE--Vhhu6+A0TUv3NyNbk4YM+FKNc=": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaInvokeN0a2GKfZP0JmDqDEVhhu6A0TUv3NyNbk4YMFKNc5DCF1FA6"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/test-key-rotatorSecret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "testkeyrotatorSecretA6333A19"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/test-key-rotatorSecret/test-key-rotatorRotation/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "testkeyrotatorSecrettestkeyrotatorRotation9ED7B4F7"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/test-key-rotatorSecret/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "testkeyrotatorSecretPolicyBAED7B59"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/AwsAccessKeyRotatorStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "AwsAccessKeyRotatorStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
